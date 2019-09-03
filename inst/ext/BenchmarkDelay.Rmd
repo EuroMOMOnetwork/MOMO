@@ -1,0 +1,257 @@
+---
+title: "Investigating delay correction"
+author: "Richard White"
+date: "`r Sys.Date()`"
+params:
+  x: TRUE
+  ra: TRUE
+---
+
+```{r setup, include = FALSE}
+if(!is.data.frame(x)){
+  stop("No params padded in")
+} else {
+  x <<- params$x
+  ra <<- params$ra
+}
+```
+
+```{r eval=TRUE, include=FALSE}
+library(data.table)
+library(ggplot2)
+
+# Functions
+TP <- function(var){
+  sum(var=="TP",na.rm=T)
+}
+
+FP <- function(var){
+  sum(var=="FP",na.rm=T)
+}
+
+TN <- function(var){
+  sum(var=="TN",na.rm=T)
+}
+
+FN <- function(var){
+  sum(var=="FN",na.rm=T)
+}
+
+PPV <- function(var){
+  return(TP(var)/(TP(var)+FP(var)))
+}
+
+NPV <- function(var){
+  return(TN(var)/(TN(var)+FN(var)))
+}
+
+SENS <- function(var){
+  return(TP(var)/(TP(var)+FN(var)))
+}
+
+SPEC <- function(var){
+  return(TN(var)/(TN(var)+FP(var)))
+}
+
+d <- x[,c(
+  "YoDi","WoDi","nb","zscore",
+  "predzscore0","predzscore1","predzscore2","predzscore3","predzscore4","predzscore5",
+  "pred0","pred1","pred2","pred3","pred4","pred5",
+  "WR0","WR1","WR2","WR3","WR4","WR5"
+  )]
+setnames(d,c("predzscore0","predzscore1","predzscore2","predzscore3","predzscore4","predzscore5"),c("pzscore0","pzscore1","pzscore2","pzscore3","pzscore4","pzscore5"))
+d <- melt.data.table(d,id.vars=c("YoDi","WoDi","nb","zscore"),measure=patterns("^pzscore","^pred","^WR"))
+setnames(d,c("value1","value2","value3"),c("pzscore","pnb","WR"))
+d[,season:=ifelse(WoDi %in% 21:39,"Summer","Winter")]
+d[,delay:=as.numeric(variable)-1]
+
+d[,error_pnb:=pnb-nb]
+
+d[,truePos:=zscore>2]
+d[,testPos:=pzscore>2]
+
+d[,test_results:=as.character(NA)]
+d[truePos==TRUE & testPos==TRUE, test_results:="TP"]
+d[truePos==FALSE & testPos==FALSE, test_results:="TN"]
+d[truePos==FALSE & testPos==TRUE, test_results:="FP"]
+d[truePos==TRUE & testPos==FALSE, test_results:="FN"]
+
+```
+
+## Traditional view
+
+```{r echo=FALSE, fig.height=5, fig.width=7, message=FALSE, warning=FALSE}
+q <- ggplot(x[wk>max(wk-50)],aes(x=wk))
+q <- q + geom_ribbon(aes(ymin=-Inf,ymax=UPIb2),alpha=0.7,fill="green")
+q <- q + geom_ribbon(aes(ymin=UPIb2,ymax=Inf),alpha=0.7, fill="yellow")
+q <- q + geom_line(aes(y=Pnb),colour="black")
+q <- q + geom_line(aes(y=nbc),colour="red")
+#q <- q + scale_x_continuous("Year",breaks=seq(2000,3000,2))
+#q <- q + scale_y_continuous("Proportion of deaths recorded")
+#q <- q + labs(title="Proportion of deaths recorded within a certain number of days")
+#q <- q + guides(fill = guide_legend(reverse = TRUE))
+q
+```
+
+## Raw deaths
+
+```{r echo=FALSE, fig.height=5, fig.width=7, message=FALSE, warning=FALSE}
+setDT(ra)
+ra[,delay:=as.numeric(difftime(DoR,DoD,units="days"))]
+ra[,year:=as.numeric(format.Date(DoD, "%G"))]
+
+r <- ra[,.(
+  days00_06=mean(delay %in% 0:6),
+  days07_13=mean(delay %in% 7:13),
+  days14_20=mean(delay %in% 14:20),
+  days21_27=mean(delay %in% 21:27),
+  days28p=mean(delay >= 28)
+),by=.(year)]
+r <- melt.data.table(r,id.vars="year")
+
+setattr(r$variable,"levels",c("0-6 days","7-13 days","14-20 days","21-27 days","28+ days"))
+
+q <- ggplot(r,aes(x=year,y=value,fill=forcats::fct_rev(variable)))
+q <- q + geom_col(alpha=0.75)
+q <- q + scale_fill_brewer("",palette="Set1")
+q <- q + scale_x_continuous("Year",breaks=seq(2000,3000,2))
+q <- q + scale_y_continuous("Proportion of deaths recorded")
+q <- q + labs(title="Proportion of deaths recorded within a certain number of days")
+#q <- q + guides(fill = guide_legend(reverse = TRUE))
+q
+```
+
+```{r echo=FALSE, fig.height=5, fig.width=7, message=FALSE, warning=FALSE}
+toPlot <- d[,.(
+  prop=mean(WR/nb)
+),keyby=.(YoDi,delay)]
+toPlot[,pdf:=shift(prop,type="lag"),by=YoDi]
+toPlot[,pdf:=prop-pdf]
+toPlot[delay==0,pdf:=prop]
+
+q <- ggplot(toPlot,aes(x=YoDi,y=pdf,fill=forcats::fct_rev(as.factor(delay))))
+q <- q + geom_col(alpha=0.75)
+q <- q + scale_fill_brewer("(Iso)week delay",palette="Set1")
+q <- q + scale_x_continuous("Year",breaks=seq(2000,3000,2))
+q <- q + scale_y_continuous("Proportion of deaths recorded")
+q <- q + labs(title="Proportion of deaths recorded in isoweek")
+#q <- q + guides(fill = guide_legend(reverse = TRUE))
+q
+```
+
+```{r echo=FALSE, fig.height=5, fig.width=7, message=FALSE, warning=FALSE}
+q <- ggplot(d,aes(x=YoDi,y=WR/nb,group=YoDi))
+q <- q + geom_boxplot()
+q <- q + facet_wrap(~delay)
+q <- q + scale_x_continuous("Year")
+q <- q + scale_y_continuous("Proportion of deaths recorded")
+q <- q + labs(title="Proportion of deaths recorded in isoweek")
+q
+```
+
+\newpage 
+
+## Raw correlations
+
+Here we investigate the correlation between:
+
+1. The true number of recorded deaths and the predicted deaths for lags of between 0 and 5 weeks
+2. The true zscore and the predicted zscore (i.e. the z-score calculated using the predicted number of deaths) for lags of between 0 and 5 weeks
+
+```{r echo=FALSE, fig.height=5, fig.width=7, message=FALSE, warning=FALSE}
+d[,.(
+  corr_nb_pnb=cor(nb,pnb,use="pairwise.complete.obs"),
+  corr_nb_wr=cor(nb,WR,use="pairwise.complete.obs"),
+  corr_zscore_pzscore=cor(zscore,pzscore,use="pairwise.complete.obs")
+),keyby=.(delay)]
+```
+
+```{r echo=FALSE, fig.height=7, fig.width=7, message=FALSE, warning=FALSE}
+q <- ggplot(d,aes(x=pzscore,y=zscore))
+q <- q + geom_point()
+q <- q + stat_smooth(se=F,method="lm")
+q <- q + facet_wrap(~delay)
+q <- q + scale_x_continuous("Z-score using predicted number of deaths at different lags")
+q <- q + scale_y_continuous("True Z-score")
+q
+```
+
+```{r echo=FALSE, fig.height=7, fig.width=7, message=FALSE, warning=FALSE}
+q <- ggplot(d,aes(x=pzscore,y=zscore,colour=season))
+q <- q + geom_point()
+q <- q + stat_smooth(se=F,method="lm")
+q <- q + facet_wrap(~delay)
+q <- q + scale_x_continuous("Z-score using predicted number of deaths at different lags")
+q <- q + scale_y_continuous("True Z-score")
+q
+```
+
+```{r echo=FALSE, fig.height=7, fig.width=7, message=FALSE, warning=FALSE}
+q <- ggplot(d,aes(x=pnb,y=nb))
+q <- q + geom_point()
+q <- q + stat_smooth(se=F,method="lm")
+q <- q + facet_wrap(~delay)
+q <- q + scale_x_continuous("Predicted number of deaths at different lags")
+q <- q + scale_y_continuous("True number of recorded deaths")
+q
+```
+
+\newpage 
+
+## Performances for excess mortality alerts
+
+We now need to investigate the performance of the alerts. That is, if excess mortality is detected in lag 0, is this actually a true alert?
+
+Here we list the number of true positives `tp`, true negatives `tn`, false positives `fp`, false negatives `fp`, and the positive predictive value `ppv`, negative predictive value `npv`, sensitivity `sens`, and specificity `spec`.
+
+```{r echo=FALSE, fig.height=5, fig.width=7, message=FALSE, warning=FALSE}
+results <- d[,.(
+  tp=TP(test_results),
+  tn=TN(test_results),
+  fp=FP(test_results),
+  fn=FN(test_results),
+  ppv=RAWmisc::Format(PPV(test_results)*100,0),
+  npv=RAWmisc::Format(NPV(test_results)*100,0),
+  sens=RAWmisc::Format(SENS(test_results)*100,0),
+  spec=RAWmisc::Format(SPEC(test_results)*100,0)
+),keyby=.(delay)]
+
+print(results)
+```
+
+\newpage 
+
+## Biases
+
+We now plot the bias (predicted number of deaths minus actual number of deaths) against the true Z-score for different lags.
+
+```{r echo=FALSE, fig.height=7, fig.width=7, message=FALSE, warning=FALSE}
+q <- ggplot(d,aes(x=zscore,y=error_pnb))
+q <- q + geom_point()
+q <- q + facet_wrap(~delay)
+q <- q + scale_x_continuous("True Z-Score")
+q <- q + scale_y_continuous("Bias (predicted number of deaths minus actual number of deaths)")
+q
+```
+
+```{r echo=FALSE, fig.height=7, fig.width=7, message=FALSE, warning=FALSE}
+q <- ggplot(d,aes(x=zscore,y=error_pnb,colour=season))
+q <- q + geom_point()
+q <- q + facet_wrap(~delay)
+q <- q + scale_x_continuous("True Z-Score")
+q <- q + scale_y_continuous("Bias (predicted number of deaths minus actual number of deaths)")
+q
+```
+
+\newpage
+
+## PZscore histograms
+
+```{r echo=FALSE, fig.height=7, fig.width=7, message=FALSE, warning=FALSE}
+q <- ggplot(d,aes(x=pzscore))
+q <- q + geom_histogram(alpha=0.7)
+q <- q + facet_wrap(~delay)
+q <- q + scale_x_continuous("Predicted Z-Score")
+q <- q + scale_y_continuous("Histogram")
+q
+```

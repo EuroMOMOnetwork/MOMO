@@ -1,0 +1,33 @@
+Package: MOMO
+Title: MOMOpack for R
+Version: 2019.06.25
+Authors@R: c(
+  person("Theodore", "Lytras", email = "thlytras@gmail.com", role = c("aut", "trl")),
+  person("Richard", "White", email = "w@rwhite.no", role = c("aut")),
+  person("Jens", "Nielsen", email = "nls@ssi.dk", role = c("aut", "cre")))
+Description: This is a full port of A-MOMOpack (the code used to analyze mortality data for the EuroMOMO project) from Stata to R.
+Note: Originally MOMOpack V 4.3 for Stata, created by Bernadette Gergonne, SSI-EpiLife for Euro MOMO. Translated into R and further development by Theodore Lytras. Converted into R package by Richard White.
+Depends: R (>= 3.3)
+Imports:
+  data.table,
+  foreign,
+  stringr,
+  stats,
+  grDevices,
+  graphics,
+  utils,
+  glm2,
+  MASS,
+  glmnet,
+  lubridate,
+  readxl,
+  ggplot2
+Suggests:
+  testthat,
+  knitr,
+  rmarkdown
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1
+VignetteBuilder: knitr

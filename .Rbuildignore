@@ -1,0 +1,12 @@
+.travis.yml
+project.Rproj
+^.*\.Rproj$
+^\.Rproj\.user$
+README.md
+deploy.sh
+make.sh
+test.RDS
+.git
+CONTRIBUTING.md
+CONTRIBUTING.pdf
+inst/benchmarkdelay/
