@@ -59,10 +59,15 @@ excessGraphsMOMO <- function(output, dirs, group=NA) {
 
     png(sprintf("%s/GRAPH-CRUDE-MORTALITY-%s-%s-%s-%s.png", dirs$FINAL, momoAttr$country, GROUP, momoAttr$YOSI, momoAttr$WOSI),
 	width=2250, height=1000, pointsize=14, res=144)
-    plotExcessGraph(data=subset(final, COND6==1), cex=1,
-	y=c("nb", "DOTm", "DOTc", "Pnb", names(final)[grep("UPIb", names(final))]),
-	line=TRUE, point=FALSE, lwd=3, lty=1,
-	col = c("navyblue", "slateblue", "seagreen", "orange2", paste("yellow", c(3:1,3:1,3:1)[1:length(grep("UPIb", names(final)))], sep="")),
+    plotExcessGraph(
+      data=subset(final, COND6==1),
+      cex=1,
+	    y=c("nb", "DOTm", "DOTc", "Pnb", names(final)[grep("UPIb", names(final))]),
+	    line=TRUE,
+      point=FALSE,
+      lwd=3,
+      lty=1,
+	    col = c("navyblue", "slateblue", "seagreen", "orange2", paste("yellow", c(3:1,3:1,3:1,3:1,3:1)[1:length(grep("UPIb", names(final)))], sep="")),
 	main = c(sprintf("Mortality in %s - Age group %s years - week %s-%s", momoAttr$country, GROUP, momoAttr$WOSI, momoAttr$YOSI),
 	    sprintf("Crude mortality, MOMO %s Model %s", VERSION, MODEL)),
 	legend = c("Number of deaths known in the series", "Data used in the model", "Corrected number of deaths", "Baseline",
@@ -89,7 +94,7 @@ excessGraphsMOMO <- function(output, dirs, group=NA) {
     plotExcessGraph(data=subset(final, COND6==1), cex=1,
 	y=c("nb", "DOTm", "DOTc", "Pnb", names(final)[grep("UPIb", names(final))]),
 	line=TRUE, point=FALSE, lwd=3, lty=1,
-	col = c("navyblue", "slateblue", "seagreen", "orange2", paste("yellow", c(3:1,3:1,3:1)[1:length(grep("UPIb", names(final)))], sep="")),
+	col = c("navyblue", "slateblue", "seagreen", "orange2", paste("yellow", c(3:1,3:1,3:1,3:1,3:1)[1:length(grep("UPIb", names(final)))], sep="")),
 	main = c(sprintf("Mortality in %s - Age group %s years - week %s-%s", momoAttr$country, GROUP, momoAttr$WOSI, momoAttr$YOSI),
 	    sprintf("Crude mortality, MOMO %s Model %s", VERSION, MODEL)),
 	legend = c("Number of deaths known in the series", "Data used in the model", "Corrected number of deaths", "Baseline",
