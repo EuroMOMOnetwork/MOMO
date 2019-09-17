@@ -89,7 +89,7 @@ CUSUMgraphsMOMO <- function(output, dirs, group=NA) {
     plotCusumGraph(data=subset(final, COND6==1), cex=0.67,
 	y=c("nbc", "DOTm", "DOTc", "Pnb", names(final)[grep("UPIb", names(final))]),lwd=3, lty=1,
 	ylab="Mortality\nseries",
-	col = c("navyblue", "slateblue", "seagreen", "orange2", paste("yellow", c(3:1,3:1,3:1)[1:length(grep("UPIb", names(final)))], sep="")),
+	col = c("navyblue", "slateblue", "seagreen", "orange2", paste("yellow", c(3:1,3:1,3:1,3:1,3:1)[1:length(grep("UPIb", names(final)))], sep="")),
 	legend = c("Number of deaths", "Data used in the model", "Corrected number of deaths", "Baseline",
 	    paste("Prediction interval +", 2*length(grep("UPIb", names(final))), " Zscores", sep="")))
 

@@ -222,7 +222,7 @@ RunMoMo <- function(){
         if(opts$verbose) cat(" (Control graphs)");
         controlGraphsMOMO(MOMOoutput, MOMOdirs)
         if(opts$verbose) cat(" (Excess graphs)");
-        excessGraphsMOMO(MOMOoutput, MOMOdirs)
+        excessGraphsMOMO(output=MOMOoutput, dirs=MOMOdirs)
         if(opts$verbose) cat(" (Fit graphs)");
         fitGraphsMOMO(MOMOoutput, MOMOdirs)
         if(opts$verbose) cat(" (CUSUM graphs)");
