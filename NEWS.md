@@ -1,3 +1,7 @@
+## MOMO 2020.4.17
+
+glmnet removed from list of dependencies
+
 ## MOMO 2018.08.24
 
 * There are now more options for extracting data from inside your MoMo run. Previously only `MOMO::dataExport$toSave` was available, however, now there is also `MOMO::dataExport$aggr`, `MOMO::dataExport$aggr_fullDelay`, and `MOMO::dataExport$aggr_delay`

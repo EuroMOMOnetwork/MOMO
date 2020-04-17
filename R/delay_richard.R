@@ -65,7 +65,7 @@ delayMOMO_richard <- function(aggr, zvalue=1.96) {
       #print(summary(fit))
       p <- predict(fit,aggr, type="response")
       if(!fit$converged | max(p,na.rm=T)>(max(aggr$nb,na.rm=T)*1.5) | min(p,na.rm=T)<(min(aggr$nb,na.rm=T)/1.5)){
-        print("DOWNGRADING MODEL DUE TO ERROR")
+        warning("DOWNGRADING MODEL DUE TO ERROR")
         fit <- glm(as.formula(formLow), data=aggr[aggr$wk %in% modellingWeeks,], family=poisson)
       }
     } else if(r==1){
@@ -78,7 +78,7 @@ delayMOMO_richard <- function(aggr, zvalue=1.96) {
       #print(summary(fit))
       p <- predict(fit,aggr, type="response")
       if(!fit$converged | max(p,na.rm=T)>(max(aggr$nb,na.rm=T)*1.5) | min(p,na.rm=T)<(min(aggr$nb,na.rm=T)/1.5)){
-        print("DOWNGRADING MODEL DUE TO ERROR")
+        warning("DOWNGRADING MODEL DUE TO ERROR")
         fit <- glm(as.formula(formLow), data=aggr[aggr$wk %in% modellingWeeks,], family=poisson)
       }
     } else {
