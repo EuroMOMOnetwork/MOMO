@@ -1,23 +1,30 @@
 # MOMOpack for R
-[![Build Status](https://travis-ci.org/raubreywhite/MOMOpack-for-R.svg?branch=master)](https://travis-ci.org/raubreywhite/MOMOpack-for-R)
-[![codecov](https://codecov.io/gh/raubreywhite/MOMOpack-for-R/branch/master/graph/badge.svg)](https://codecov.io/gh/raubreywhite/MOMOpack-for-R)
 
 #
 This is a full port of A-MOMOpack (the code used to analyze mortality data for the [EuroMOMO project](www.euroMOMO.eu)) from Stata to R.
 
 # News
 
-## MOMO 2018.08.24
+## MOMO 2020.4.17
 
-* There are now more options for extracting data from inside your MOMO run. Previously only `MOMO::dataExport$toSave` was available, however, now there is also `MOMO::dataExport$aggr`, `MOMO::dataExport$aggr_fullDelay`, and `MOMO::dataExport$aggr_delay`
+glmnet removed from list of dependencies
+
+## MOMO 2018.8.24
+
+* There are now more options for extracting data from inside your MoMo run. Previously only `MOMO::dataExport$toSave` was available, however, now there is also `MOMO::dataExport$aggr`, `MOMO::dataExport$aggr_fullDelay`, and `MOMO::dataExport$aggr_delay`
+
+## MOMO 2018.8.23
+
+* The new delay correction that Jens developed in December 2017 is now available. This can be chosen by `delayVersion="2017-12"`, or the original delay correction can be chosen by `delayVersion="original"` (default).
     
 ## MOMO 2017.12.14
 
-* This is a full port of A-MOMOpack (the code used to analyze mortality data for the [EuroMOMO project](www.euroMOMO.eu)) from Stata to R.
+* This is a full port of A-MOMOpack (the code used to analyze mortality data for the [EuroMOMO project](www.euromomo.eu)) from Stata to R.
+
 
 # How to install
 
-Please use my [drat](https://github.com/eddelbuettel/drat) repository to install this package from, as the drat repository only contains package versions that have passed [testing](http://travis-ci.org/euromomonetwork/MOMO).
+Please use the [drat](https://github.com/eddelbuettel/drat) repository to install this package from, as the drat repository only contains package versions that have passed [testing](http://travis-ci.org/euromomonetwork/MOMO).
 
 ```
 install.packages("MOMO", repos="https://euromomonetwork.github.io/drat/")
