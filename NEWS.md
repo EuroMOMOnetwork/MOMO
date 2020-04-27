@@ -1,3 +1,7 @@
+## MOMO 2020.4.27
+
+Added the input variables Ydrop and Wdrop
+
 ## MOMO 2020.4.17
 
 glmnet removed from list of dependencies
