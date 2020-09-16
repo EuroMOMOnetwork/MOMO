@@ -1,3 +1,7 @@
+## MOMO 2020.9.3
+
+Spring weeks of 2020, COVID-19, permanently excluded from baseline estimation
+
 ## MOMO 2020.4.27
 
 Added the input variables Ydrop and Wdrop

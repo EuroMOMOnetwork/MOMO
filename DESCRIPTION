@@ -1,10 +1,10 @@
-Package: MOMO
+﻿Package: MOMO
 Title: MOMOpack for R
 Version: 2020.9.3
 Authors@R: c(
   person("Theodore", "Lytras", email = "thlytras@gmail.com", role = c("aut", "trl")),
   person("Richard", "White", email = "w@rwhite.no", role = c("aut")),
-  person("Sarah", "Nørgaard", email = "w@rwhite.no", role = c("aut")),
+  person("Sarah", "Nørgaard", email = "sknd@rssi.dk", role = c("aut")),
   person("Jens", "Nielsen", email = "nls@ssi.dk", role = c("aut", "cre")))
 Description: This is a full port of A-MOMOpack (the code used to analyze mortality data for the EuroMOMO project) from Stata to R.
 Note: Originally MOMOpack V 4.3 for Stata, created by Bernadette Gergonne, SSI-EpiLife for Euro MOMO. Translated into R and further development by Theodore Lytras. Converted into R package by Richard White.
