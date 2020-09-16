@@ -29,7 +29,7 @@ glmnet removed from list of dependencies
 Please use the [drat](https://github.com/eddelbuettel/drat) repository to install this package from, as the drat repository only contains package versions that have passed [testing](http://travis-ci.org/euromomonetwork/MOMO).
 
 ```
-install.packages("MOMO", repos="https://euromomonetwork.github.io/drat/")
+install.packages("MOMO", repos = c("https://euromomonetwork.github.io/drat", "https://cran.rstudio.com"))
 ```
 
 # Basic example

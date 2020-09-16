@@ -34,8 +34,8 @@ SetOpts(
     "age >= 0 | is.na(age)"),
   MOMOmodels = c(`0to4` = "LINE", `5to14` = "LINE", `15to64` = "LINE_SIN", `65P` =
     "LINE_SIN", Total = "LINE_SIN"),
-  Ydrop,
-  Wdrop,
+  Ydrop = 9999,
+  Wdrop = 99,
   verbose = TRUE
 )
 }
