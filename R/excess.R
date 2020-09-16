@@ -47,7 +47,9 @@ excessMOMO <- function(aggr, version, useAUTOMN, USEglm2, zvalue=1.96) {
 
   # Conditions for modelling
   # We remove "winter" and "summer"...actually we keep spring and autumn
-  aggr$COND3[(aggr$WoDi>momoAttr$SPRING[1] & aggr$WoDi<momoAttr$SPRING[2]) | (aggr$WoDi>momoAttr$AUTUMN[1] & aggr$WoDi<momoAttr$AUTUMN[2])] <- 1
+  # aggr$COND3[((momoAttr$SPRING[1] < aggr$WoDi) & (aggr$WoDi < momoAttr$SPRING[2])) | ((momoAttr$AUTUMN[1] < aggr$WoDi) & (aggr$WoDi<momoAttr$AUTUMN[2]))] <- 1
+  # Exclude spring 2020 - 2020-09-03 Jens & Sarah
+  aggr$COND3[((momoAttr$SPRING[1] < aggr$WoDi) & (aggr$WoDi < momoAttr$SPRING[2]) & (aggr$YoDi != 2020)) | ((momoAttr$AUTUMN[1] < aggr$WoDi) & (aggr$WoDi<momoAttr$AUTUMN[2]))] <- 1
   # We remove the previous weeks if there is no unusual excess observed
   aggr$COND4 <- as.integer(aggr$YoDi < opts$Ydrop | (aggr$YoDi == opts$Ydrop & aggr$WoDi < opts$Wdrop))
   # aggr$COND4 <- as.integer(aggr$YoDi < momoAttr$Ydrop | (aggr$YoDi==momoAttr$Ydrop & aggr$WoDi<momoAttr$Wdrop))
@@ -58,7 +60,6 @@ excessMOMO <- function(aggr, version, useAUTOMN, USEglm2, zvalue=1.96) {
 
   aggr$CONDmodel[with(aggr, COND3==1 & COND4==1 & COND5==1 & COND6==1)] <- 1
   aggr$CONDpred[aggr$COND6 == 1] <- 1
-
 
 
   # DETECTION OF ANY EXCESS adapted Serfling MODEL

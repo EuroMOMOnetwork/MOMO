@@ -123,11 +123,14 @@ opts$delayVariance <- FALSE
 # and can overlap if needed.
 
 opts$MOMOgroups <- list(
-  "0to4" =  "age >= 0 & age <=4",
-  "5to14" = "age >= 5 & age <=14",
-  "15to64" = "age >= 15 & age <=64",
-  "65P" = "age >= 65 | is.na(age)",
-  "Total" = "age >= 0 | is.na(age)"
+                  "0to14" = "0 <= age & age <= 14",
+                  "15to44" = "15 <= age & age <= 44",
+                  "45to64" = "45 <= age & age <= 64",
+                  "65P" = "age >= 65 & !is.na(age)",
+                  "65to74" = "65 <= age & age <= 74",
+                  "75to84" = "75 <= age & age <= 84",
+                  "85P" = "age >= 85 & !is.na(age)",
+                  "Total" = "age >= 0 | is.na(age)"
 )
 
 # Names in the following vector should correspond to the groups above,
@@ -135,10 +138,15 @@ opts$MOMOgroups <- list(
 # should be one of "LINE", "SPLINE", "LINE_SIN", "SPLINE_SIN"
 
 opts$MOMOmodels <- c(
-  "0to4" = "LINE",
-  "5to14" = "LINE",
-  "15to64" = "LINE_SIN",
+  "0to14" = "LINE",
+  "15to44" = "LINE_SIN",
+  "45to64" = "LINE_SIN",
   "65P" = "LINE_SIN",
+  "65to74" = "LINE_SIN",
+  "75to84" = "LINE_SIN",
+  "85P" = "LINE_SIN",
   "Total" = "LINE_SIN"
 )
 
+opts$Ydrop <- 9999
+opts$Wdrop <- 99
