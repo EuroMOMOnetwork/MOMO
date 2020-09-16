@@ -34,6 +34,8 @@ SetOpts(
     "age >= 0 | is.na(age)"),
   MOMOmodels = c(`0to4` = "LINE", `5to14` = "LINE", `15to64` = "LINE_SIN", `65P` =
     "LINE_SIN", Total = "LINE_SIN"),
+  Ydrop,
+  Wdrop,
   verbose = TRUE
 )
 }
@@ -89,6 +91,10 @@ SetOpts(
 \item{MOMOgroups}{Definition of the groups to be analyzed}
 
 \item{MOMOmodels}{Names in the following vector should correspond to the MOMOgroups and the corresponding values (model to use for each group) should be one of "LINE", "SPLINE", "LINE_SIN", "SPLINE_SIN"}
+
+\item{Ydrop}{Year after which data are not included in the baseline estimation}
+
+\item{Wdrop}{Week of Ydrop after which data are not included in the baseline estimation}
 
 \item{verbose}{Printing out information}
 }

@@ -69,7 +69,9 @@ SetOpts <- function(
     "15to64" = "LINE_SIN",
     "65P" = "LINE_SIN",
     "Total" = "LINE_SIN"
-  ), Ydrop, Wdrop,
+  ),
+  Ydrop = 9999,
+  Wdrop = 99,
   verbose=TRUE){
 
   if(!delayVersion %in% opts$delayVersionAvailable) stop("delayVersion not 'original' or '2017-12'")
