@@ -1,6 +1,6 @@
 Package: MOMO
 Title: MOMOpack for R
-Version: 2021.1.5
+Version: 2021.1.7
 Authors@R: c(
   person("Theodore", "Lytras", email = "thlytras@gmail.com", role = c("aut", "trl")),
   person("Richard", "White", email = "w@rwhite.no", role = c("aut")),
