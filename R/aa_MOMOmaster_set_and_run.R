@@ -27,6 +27,8 @@
 #' @param delayVariance If this is true, it means that the prediction variance (from delay correction) is included in the z-scores+confidence interval
 #' @param MOMOgroups Definition of the groups to be analyzed
 #' @param MOMOmodels Names in the following vector should correspond to the MOMOgroups and the corresponding values (model to use for each group) should be one of "LINE", "SPLINE", "LINE_SIN", "SPLINE_SIN"
+#' @param Ydrop Year after which data are not included in the baseline estimation
+#' @param Wdrop Week of Ydrop after which data are not included in the baseline estimation
 #' @param verbose Printing out information
 #' @export SetOpts
 SetOpts <- function(
@@ -68,6 +70,8 @@ SetOpts <- function(
     "65P" = "LINE_SIN",
     "Total" = "LINE_SIN"
   ),
+  Ydrop = 9999,
+  Wdrop = 99,
   verbose=TRUE){
 
   if(!delayVersion %in% opts$delayVersionAvailable) stop("delayVersion not 'original' or '2017-12'")
@@ -100,6 +104,8 @@ SetOpts <- function(
   opts$delayVariance <- delayVariance
   opts$MOMOgroups <- MOMOgroups
   opts$MOMOmodels <- MOMOmodels
+  opts$Ydrop <- Ydrop
+  opts$Wdrop <- Wdrop
   opts$verbose <- verbose
 }
 
@@ -222,7 +228,7 @@ RunMoMo <- function(){
         if(opts$verbose) cat(" (Control graphs)");
         controlGraphsMOMO(MOMOoutput, MOMOdirs)
         if(opts$verbose) cat(" (Excess graphs)");
-        excessGraphsMOMO(MOMOoutput, MOMOdirs)
+        excessGraphsMOMO(output=MOMOoutput, dirs=MOMOdirs)
         if(opts$verbose) cat(" (Fit graphs)");
         fitGraphsMOMO(MOMOoutput, MOMOdirs)
         if(opts$verbose) cat(" (CUSUM graphs)");

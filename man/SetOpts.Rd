@@ -4,20 +4,40 @@
 \alias{SetOpts}
 \title{Set all the options for MoMo.}
 \usage{
-SetOpts(DoA = as.Date("2015-8-10"), DoPR = as.Date("2008-1-1"),
-  WStart = 1, WEnd = 52, country = "Greece", source = "UoP",
-  MFILE = "greece_m.dta", HFILE = "holidayfilegreece.dta",
-  INPUTDIR = "./input", MDATA = NULL, HDATA = NULL,
-  WDIR = "./output", back = 3, WWW = 290, Ysum = 2009, Wsum = 34,
-  USEglm2 = TRUE, useAUTOMN = TRUE, datesISO = FALSE,
-  plotGraphs = TRUE, removeDataAfterDoA = TRUE,
-  delayVersion = "original", delayFunction = NULL,
-  delayVariance = FALSE, MOMOgroups = list(`0to4` =
-  "age >= 0 & age <=4", `5to14` = "age >= 5 & age <=14", `15to64` =
-  "age >= 15 & age <=64", `65P` = "age >= 65 | is.na(age)", Total =
-  "age >= 0 | is.na(age)"), MOMOmodels = c(`0to4` = "LINE", `5to14` =
-  "LINE", `15to64` = "LINE_SIN", `65P` = "LINE_SIN", Total = "LINE_SIN"),
-  verbose = TRUE)
+SetOpts(
+  DoA = as.Date("2015-8-10"),
+  DoPR = as.Date("2008-1-1"),
+  WStart = 1,
+  WEnd = 52,
+  country = "Greece",
+  source = "UoP",
+  MFILE = "greece_m.dta",
+  HFILE = "holidayfilegreece.dta",
+  INPUTDIR = "./input",
+  MDATA = NULL,
+  HDATA = NULL,
+  WDIR = "./output",
+  back = 3,
+  WWW = 290,
+  Ysum = 2009,
+  Wsum = 34,
+  USEglm2 = TRUE,
+  useAUTOMN = TRUE,
+  datesISO = FALSE,
+  plotGraphs = TRUE,
+  removeDataAfterDoA = TRUE,
+  delayVersion = "original",
+  delayFunction = NULL,
+  delayVariance = FALSE,
+  MOMOgroups = list(`0to4` = "age >= 0 & age <=4", `5to14` = "age >= 5 & age <=14",
+    `15to64` = "age >= 15 & age <=64", `65P` = "age >= 65 | is.na(age)", Total =
+    "age >= 0 | is.na(age)"),
+  MOMOmodels = c(`0to4` = "LINE", `5to14` = "LINE", `15to64` = "LINE_SIN", `65P` =
+    "LINE_SIN", Total = "LINE_SIN"),
+  Ydrop = 9999,
+  Wdrop = 99,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{DoA}{Date of aggregation (see specifications, the only information to change weekly). Provided in ISO format, i.e. YYYY-MM-DD.}
@@ -71,6 +91,10 @@ SetOpts(DoA = as.Date("2015-8-10"), DoPR = as.Date("2008-1-1"),
 \item{MOMOgroups}{Definition of the groups to be analyzed}
 
 \item{MOMOmodels}{Names in the following vector should correspond to the MOMOgroups and the corresponding values (model to use for each group) should be one of "LINE", "SPLINE", "LINE_SIN", "SPLINE_SIN"}
+
+\item{Ydrop}{Year after which data are not included in the baseline estimation}
+
+\item{Wdrop}{Week of Ydrop after which data are not included in the baseline estimation}
 
 \item{verbose}{Printing out information}
 }

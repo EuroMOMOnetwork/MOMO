@@ -20,7 +20,7 @@ aggregateMOMO <- function(mi, group, compatibility.mode=FALSE) {
   # COMPLETION OF TIME SERIES
   # we ensure that there is no missing weeks in the series
   # by merging with a complete time series from 1960 until 2020
-  time.txt <- seq.Date(as.Date("1961-1-5"), as.Date("2021-1-5"), by="week")
+  time.txt <- seq.Date(as.Date("1961-1-5"), as.Date("2025-1-5"), by="week")
   time.txt <- as.data.frame(isoweek(time.txt, "matrix")[,2:1])
   names(time.txt) <- c("YoDi", "WoDi")
   aggr4 <- merge(time.txt, aggr3, all=TRUE)
